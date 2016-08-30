@@ -73,9 +73,9 @@ class find_equilibrium(object):
         M = len(self.n_stratergies)
         # No of rows in stratergy matrix( NOT REQ., CHECK)
         N = self.utils.shape[0]
+        jf = 1
         # Find stratergies
         for i in xrange(1, M+1):
-            jf = 1
             util = self.utils[:, -i]
             nsteps = np.prod(np.delete(self.n_stratergies, i-1))
             ind = 0
@@ -85,20 +85,23 @@ class find_equilibrium(object):
                 for k in xrange(self.n_stratergies[i-1]):
                     ind_vec.append(ind)
                     ind+= jf
+                pdb.set_trace()
                 utilities = util[ind_vec]
                 arg_vec.append(self.find_max(utilities))
-            pdb.set_trace()
+            #pdb.set_trace()
             DS = set.intersection(*map(set, arg_vec))
-            if len(DS) > 1:
+            if len(DS) >= 1:
                 DS = list(DS)[0]
                 self.ds.append(DS)
             else:
                 print("No dominant stratergy, exit")
                 return
+
             jf *= self.n_stratergies[i-1]
+            #pdb.set_trace()
 
 if __name__ == "__main__":
     game = find_equilibrium()
-    game.parser('./sample_inp.nfg')
+    game.parser('./prisoner_dimemma.nfg')
     game.find_equilibrium()
     print(game.ds)
